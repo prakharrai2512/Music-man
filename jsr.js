@@ -1,3 +1,5 @@
+//Code by Monke ~Prakhar Rai
+
 var char2en={
     '\n' : 0,
     ' ' : 1 ,
@@ -84,6 +86,92 @@ var char2en={
     '|': 82 
 };
 
+
+var decoder = ['\n' ,
+    ' ' ,
+    '!' ,
+    '"' ,
+    '#' ,
+    '\'' ,
+    '(' ,
+    ')' ,
+    ',' ,
+    '-' ,
+    '.' ,
+    '/' ,
+    '0' ,
+    '1' ,
+    '2' ,
+    '3' ,
+    '4' ,
+    '5' ,
+    '6' ,
+    '7' ,
+    '8' ,
+    '9' ,
+    ':' ,
+    '<' ,
+    '=' ,
+    '>' ,
+    'A' ,
+    'B' ,
+    'C' ,
+    'D' ,
+    'E' ,
+    'F' ,
+    'G' ,
+    'H' ,
+    'I' ,
+    'J' ,
+    'K' ,
+    'L' ,
+    'M' ,
+    'N' ,
+    'O' ,
+    'P' ,
+    'Q' ,
+    'R' ,
+    'S' ,
+    'T' ,
+    'U' ,
+    'V' ,
+    'W' ,
+    'X' ,
+    'Y' ,
+    'Z' ,
+    '[' ,
+    ']' ,
+    '^' ,
+    '_' ,
+    'a' ,
+    'b' ,
+    'c' ,
+    'd' ,
+    'e' ,
+    'f' ,
+    'g' ,
+    'h' ,
+    'i' ,
+    'j' ,
+    'k' ,
+    'l' ,
+    'm' ,
+    'n' ,
+    'o' ,
+    'p' ,
+    'q' ,
+    'r' ,
+    's' ,
+    't' ,
+    'u' ,
+    'v' ,
+    'w' ,
+    'x' ,
+    'y' ,
+    'z' ,
+    '|' 
+]
+
 async function predicter(output){
     var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/jsrmodel/model.json';
     const model = await tf.loadLayersModel(model_path,Strict=false);
@@ -114,14 +202,34 @@ async function tatake(){
     //predicted.then(res=>console.log(res));
     //prediction = model.tehn(tf.tensor(output,[1,1]));
     //var prediction = model.predict(tf.tensor(output,[1,1]));;
-    model.then(function (res) {
-        const prediction = res.predict(tf.tensor(output,[1,1]));
-        console.log(tf.squeeze(prediction,0));
-        const predicted_id = tf.squeeze(prediction,0).dataSync();
-        const sampled = tf.multinomial(predicted_id,1);
-        console.log(sampled.dataSync()[0]);
-    }, function (err) {
-        console.log(err);
-    });
+    var ans1="X:1\n";
+    for(let i=0;i<1000;i++){
+        await model.then(function (res) {
+            const prediction = res.predict(tf.tensor(output,[1,1]));
+            //console.log(tf.squeeze(prediction,0));
+            const predicted_id = tf.squeeze(prediction,0).dataSync();
+            const sampled = tf.multinomial(predicted_id,1);
+            output=[sampled.dataSync()[0]];
+            //console.log(output);
+            ans1 +=(decoder[sampled.dataSync()[0]]);
+            //console.log(ans1);
+        }, function (err) {
+            console.log(err);
+        });
+        //console.log(ans1);
+    }
+    //return ans1;
+    //sleep(1000);
+    console.log(ans1);
     //console.log(prediction);
 }
+
+
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
+
