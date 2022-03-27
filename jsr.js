@@ -116,7 +116,10 @@ async function tatake(){
     //var prediction = model.predict(tf.tensor(output,[1,1]));;
     model.then(function (res) {
         const prediction = res.predict(tf.tensor(output,[1,1]));
-        console.log(tf.squeeze(prediction));
+        console.log(tf.squeeze(prediction,0));
+        const predicted_id = tf.squeeze(prediction,0).dataSync();
+        const sampled = tf.multinomial(predicted_id,1);
+        console.log(sampled.dataSync()[0]);
     }, function (err) {
         console.log(err);
     });
