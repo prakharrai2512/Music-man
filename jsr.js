@@ -1,4 +1,5 @@
 //Code by Monke ~Prakhar Rai
+var inst = new Instrument({wave: 'piano', detune: 1});
 
 var char2en={
     '\n' : 0,
@@ -222,6 +223,13 @@ async function tatake(){
     //sleep(1000);
     console.log(ans1);
     //console.log(prediction);
+    await inst.play(ans1,
+        // The optional last argument is a callback when the song is done.
+        function() {
+          document.getElementsByTagName('span')[0].innerHTML = '(Done playing.)';
+        }
+      );
+
 }
 
 
