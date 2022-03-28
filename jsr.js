@@ -1,5 +1,5 @@
 //Code by Monke ~Prakhar Rai
-var inst = new Instrument({wave: 'piano', detune: 1});
+var inst = new Instrument({wave: 'piano', detune: 0});
 
 var char2en={
     '\n' : 0,
@@ -171,7 +171,7 @@ var decoder = ['\n' ,
     'y' ,
     'z' ,
     '|' 
-]
+];
 
 async function predicter(output){
     var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/jsrmodel/model.json';
@@ -181,7 +181,7 @@ async function predicter(output){
 }
 
 async function load(){
-    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/jsrmodel/model.json';
+    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/12seq/model.json';
     let model = await tf.loadLayersModel(model_path,Strict=false);
     return model;
 }
@@ -191,7 +191,7 @@ console.log("Friday hai bc");
 
 async function tatake(){
     var input = document.getElementById("reader").value;
-    var output=[]
+    var output=[];
     for(let i=0;i<input.length;i++){
         output.push(char2en[input[i]]);
     }
@@ -203,17 +203,30 @@ async function tatake(){
     //predicted.then(res=>console.log(res));
     //prediction = model.tehn(tf.tensor(output,[1,1]));
     //var prediction = model.predict(tf.tensor(output,[1,1]));;
-    var ans1="X:1\n";
+    var ans1="X:1\n Q:120";
     for(let i=0;i<1000;i++){
         await model.then(function (res) {
-            const prediction = res.predict(tf.tensor(output,[1,1]));
-            //console.log(tf.squeeze(prediction,0));
-            const predicted_id = tf.squeeze(prediction,0).dataSync();
-            const sampled = tf.multinomial(predicted_id,1);
-            output=[sampled.dataSync()[0]];
-            //console.log(output);
-            ans1 +=(decoder[sampled.dataSync()[0]]);
-            //console.log(ans1);
+            const prediction = res.predict(tf.tensor(output,[12,]));
+            //console.log(prediction);
+            var predicted_id = prediction.dataSync();
+            predicted_id = predicted_id.slice(913,996);
+            //console.log(predicted_id);
+            const sampled = tf.multinomial(predicted_id,2);
+            var choose;
+            choose = sampled.dataSync()[0];
+            if(choose=='\n'){
+                choose = sampled.dataSync()[1];
+            }
+            console.log(choose);
+            var temp=[];
+            for(let i=1;i<12;i++){
+                temp.push(output[i]);
+            }
+            temp.push(choose);
+            output=temp;
+            console.log(output);
+            ans1 +=(decoder[choose]);
+            //console.log(sampled.dataSync()[0]);
         }, function (err) {
             console.log(err);
         });
