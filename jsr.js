@@ -203,7 +203,7 @@ async function tatake(){
     //predicted.then(res=>console.log(res));
     //prediction = model.tehn(tf.tensor(output,[1,1]));
     //var prediction = model.predict(tf.tensor(output,[1,1]));;
-    var ans1="X:1\n Q:120";
+    var ans1="X:1\nQ:120\n";
     for(let i=0;i<1000;i++){
         await model.then(function (res) {
             const prediction = res.predict(tf.tensor(output,[1,]));
