@@ -237,16 +237,21 @@ async function tatake(){
     console.log(ans1);
     var player=[];
     var i=0;
-    for(let j=0;j<ans1.length();j++){
-        
-    }
-    //console.log(prediction);
-    await inst.play(ans1,
-        // The optional last argument is a callback when the song is done.
-        function() {
-          document.getElementsByTagName('span')[0].innerHTML = '(Done playing.)';
+    for(let j=1;j<ans1.length;j++){
+        if(ans1[j]=='X'){
+            player.push(ans1.slice(i,j));
+            i=j;
         }
-      );
+    }
+    player.push(ans1.slice(i,ans1.length));
+    console.log(player);
+    
+        await inst.play(ans1,
+            // The optional last argument is a callback when the song is done.
+            function() {
+            document.getElementsByTagName('span')[0].innerHTML = '(Done playing.)';
+            }
+        );
 
 }
 
