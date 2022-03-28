@@ -181,8 +181,8 @@ async function predicter(output){
 }
 
 async function load(){
-    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/12seq/model.json';
-    let model = await tf.loadLayersModel(model_path,Strict=false);
+    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/12.1seq/model.json';
+    let model = await tf.loadLayersModel(model_path);
     return model;
 }
 
@@ -203,7 +203,7 @@ async function tatake(){
     //predicted.then(res=>console.log(res));
     //prediction = model.tehn(tf.tensor(output,[1,1]));
     //var prediction = model.predict(tf.tensor(output,[1,1]));;
-    var ans1="X:1\n Q:120";
+    var ans1="X:1\nQ:120";
     for(let i=0;i<1000;i++){
         await model.then(function (res) {
             const prediction = res.predict(tf.tensor(output,[12,]));
@@ -214,9 +214,9 @@ async function tatake(){
             const sampled = tf.multinomial(predicted_id,2);
             var choose;
             choose = sampled.dataSync()[0];
-            if(choose=='\n'){
+            /*if(choose=='\n'){
                 choose = sampled.dataSync()[1];
-            }
+            }*/
             console.log(choose);
             var temp=[];
             for(let i=1;i<12;i++){
@@ -235,6 +235,11 @@ async function tatake(){
     //return ans1;
     //sleep(1000);
     console.log(ans1);
+    var player=[];
+    var i=0;
+    for(let j=0;j<ans1.length();j++){
+        
+    }
     //console.log(prediction);
     await inst.play(ans1,
         // The optional last argument is a callback when the song is done.
