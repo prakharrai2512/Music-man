@@ -181,7 +181,7 @@ async function predicter(output){
 }
 
 async function load(){
-    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/12seq/model.json';
+    var model_path='https://raw.githubusercontent.com/prakharrai2512/Music-man/master/jsrmodel/model.json';
     let model = await tf.loadLayersModel(model_path,Strict=false);
     return model;
 }
@@ -206,10 +206,10 @@ async function tatake(){
     var ans1="X:1\n Q:120";
     for(let i=0;i<1000;i++){
         await model.then(function (res) {
-            const prediction = res.predict(tf.tensor(output,[12,]));
+            const prediction = res.predict(tf.tensor(output,[1,]));
             //console.log(prediction);
             var predicted_id = prediction.dataSync();
-            predicted_id = predicted_id.slice(913,996);
+            //predicted_id = predicted_id.slice(913,996);
             //console.log(predicted_id);
             const sampled = tf.multinomial(predicted_id,2);
             var choose;
@@ -218,13 +218,13 @@ async function tatake(){
                 choose = sampled.dataSync()[1];
             }
             console.log(choose);
-            var temp=[];
+            /*var temp=[];
             for(let i=1;i<12;i++){
                 temp.push(output[i]);
             }
-            temp.push(choose);
-            output=temp;
-            console.log(output);
+            temp.push(choose);*/
+            //output=temp;
+            console.log(choose);
             ans1 +=(decoder[choose]);
             //console.log(sampled.dataSync()[0]);
         }, function (err) {
