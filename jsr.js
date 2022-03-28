@@ -244,15 +244,20 @@ async function tatake(){
         }
     }
     player.push(ans1.slice(i,ans1.length));
-    console.log(player);
-    
-        await inst.play(ans1,
+    //console.log(player);
+    for(let i=0;i<player.length;i++){
+        await inst.play(player[i],
             // The optional last argument is a callback when the song is done.
             function() {
+            console.log(player[i]);
             document.getElementsByTagName('span')[0].innerHTML = '(Done playing.)';
             }
         );
-
+        inst.on('noteon', function(e) {
+            console.log(e.frequency);
+        });
+        
+    }
 }
 
 
@@ -262,5 +267,6 @@ function sleep(milliseconds) {
     do {
       currentDate = Date.now();
     } while (currentDate - date < milliseconds);
-  }
+}
+
 
